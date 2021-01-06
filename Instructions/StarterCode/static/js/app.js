@@ -13,5 +13,30 @@ console.log(top10_ids);
 var top10_values = data.samples[0].sample_values.slice(0,10);
 console.log(top10_values);
 
+// create an array of otu labels that correlate with info
+var top10_labels = data.samples[0].otu_labels.slice(0,10);
+console.log(top10_labels);
+
+// Since the Otu is displayed as int, need to add "OTU" infront
+// to insure its seens as string and easy to read. 
+// map method allows to create a new array with added info
+var top_OTU_id = top10_ids.map(id => "OTU " + id);
+console.log(top_OTU_id);
+
+
+// create a trace for plot
+// used reverse to display the graph from highest to lowest
+var tracebar = {
+    x: top10_values.reverse(),
+    y: top_OTU_id.reverse(),
+    type: "bar",
+    orientation : 'h',
+    text : top10_labels.reverse()
+};
+
+var bardata = [tracebar];
+
+
+Plotly.newPlot("bar", bardata)
 
 });
