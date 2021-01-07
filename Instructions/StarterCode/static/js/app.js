@@ -80,6 +80,9 @@ var bubbledata = [tracebubble];
 Plotly.newPlot("bubble", bubbledata, layout_2)
 
 // work-on creating demographic data
+// thought process: similar to creating table for previous homework
+// dropdown button needed and connect the json to display id info
+
 
 
 });
