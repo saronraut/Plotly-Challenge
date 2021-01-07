@@ -62,14 +62,14 @@ var tracebubble = {
     mode: "markers",
     marker : {
         size: Otu_values,
-        color: Otu_values
+        color: sample_ids
     },
     // didn't have variables saved but labels was retreieved
     text : data.samples[0].otu_labels
 };
 // assign layout for clear context layout name was changed. 
 var layout_2 = {
-    height: 800,
+    height: 500,
     width : 1000,
     xaxis : {title:"OTU ID"}
 }
@@ -79,6 +79,7 @@ var bubbledata = [tracebubble];
 
 Plotly.newPlot("bubble", bubbledata, layout_2)
 
+// work-on creating demographic data
 
 
 });
