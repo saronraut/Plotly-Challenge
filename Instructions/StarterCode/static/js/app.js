@@ -34,9 +34,51 @@ var tracebar = {
     text : top10_labels.reverse()
 };
 
+var layout = {
+    title : "Top 10 OTU",
+    showlegend : false
+};
+// create the data into an array
 var bardata = [tracebar];
 
+// Use plotly to create a barh
+Plotly.newPlot("bar", bardata, layout)
 
-Plotly.newPlot("bar", bardata)
+
+// Second TASK: Creating a bubble chart that display each samples
+// x is otu_id and y is sample_values
+// sample_id contains all the OTU in first sample
+
+// create an array(list) of samples_value 
+var Otu_values = data.samples[0].sample_values;
+console.log(Otu_values);
+
+
+
+//  created a Trace for Bubble plot
+var tracebubble = {
+    x: sample_ids,
+    y: Otu_values,
+    mode: "markers",
+    marker : {
+        size: Otu_values,
+        color: Otu_values
+    },
+    // didn't have variables saved but labels was retreieved
+    text : data.samples[0].otu_labels
+};
+// assign layout for clear context layout name was changed. 
+var layout_2 = {
+    height: 800,
+    width : 1000,
+    xaxis : {title:"OTU ID"}
+}
+
+// creating an array for plot
+var bubbledata = [tracebubble];
+
+Plotly.newPlot("bubble", bubbledata, layout_2)
+
+
 
 });
