@@ -1,6 +1,6 @@
 // First Task: Use d3 to read json and create a horizontal bar chart with top ten OTU
 d3.json("samples.json").then((data) => {
-    // console.log(data);
+    console.log(data);
 // trying to plot the otu from first sample
 var sample_ids = data.samples[0].otu_ids;
 // console.log(sample_ids);  
@@ -81,18 +81,49 @@ Plotly.newPlot("bubble", bubbledata, layout_2)
 
 });
 
+
 // work on creating demographic data
 // call function to get data
 function getdeminfo(id){
     d3.json("samples.json").then((data)=> {
+        // from the json call read only the metadata array
         var meta_data = data.metadata;
         console.log(meta_data);
 
-        var result = meta_data.filter(item => item.id === id)[0];
+        // use the id to filter the data
+        var result = meta_data.filter(item => item.id.toString() === id)[0];
 
+        // assign the html location on where the data should be displayed
         var demoinfo = d3.select("#sample-metadata");
-    })
- }
+
+        // to empty out the info to load next
+        demoinfo.html("");
+
+        // grab the data for the id and append the info
+        Object.entries(result).ForEach((key) =>{
+            demoinfo.append("h5").text(key[0] + ":" + key[1]);
+        });
+    });
+ };
+
+ // need to add inital data for info to display
+// function dropdown_menu () {
+    // select the drop down menu
+    var dropdown = d3.select("selDataset");
+
+    d3.json("samples.json").then((data) => {
+        // append the id data to dropdown menu
+        data.names.ForEach(function(name) {
+            dropdown.append("option").text(name).property("value");
+        });
+    });
+// };
+
+// function for change event
+// function changeEvent (id) {
+//     getPlots(id);
+//     get demoinfo (id);
+// }
 
 
 
