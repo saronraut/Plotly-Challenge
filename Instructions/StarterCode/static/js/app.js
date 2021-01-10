@@ -1,129 +1,143 @@
 // First Task: Use d3 to read json and create a horizontal bar chart with top ten OTU
-d3.json("samples.json").then((data) => {
-    console.log(data);
-// trying to plot the otu from first sample
-var sample_ids = data.samples[0].otu_ids;
-// console.log(sample_ids);  
 
-// getting the list of the first 10
-var top10_ids = sample_ids.slice(0,10);
-// console.log(top10_ids);
+// realzied I need to make it into a function so it can be called during changed event
+function getPlots (id){
+    d3.json("samples.json").then((data) => {
+        console.log(data);
+        // trying to plot the otu from first sample
+        let sample_ids = data.samples[0].otu_ids;
+        // console.log(sample_ids);  
 
-// create an array(list) of samples_value 
-var top10_values = data.samples[0].sample_values.slice(0,10);
-// console.log(top10_values);
+        // getting the list of the first 10
+        let top10_ids = sample_ids.slice(0,10);
+        // console.log(top10_ids);
 
-// create an array of otu labels that correlate with info
-var top10_labels = data.samples[0].otu_labels.slice(0,10);
-// console.log(top10_labels);
+        // create an array(list) of samples_value 
+        let top10_values = data.samples[0].sample_values.slice(0,10);
+        // console.log(top10_values);
 
-// Since the Otu is displayed as int, need to add "OTU" infront
-// to insure its seens as string and easy to read. 
-// map method allows to create a new array with added info
-var top_OTU_id = top10_ids.map(id => "OTU " + id);
-// console.log(top_OTU_id);
+        // create an array of otu labels that correlate with info
+        let top10_labels = data.samples[0].otu_labels.slice(0,10);
+        // console.log(top10_labels);
+
+        // Since the Otu is displayed as int, need to add "OTU" infront
+        // to insure its seens as string and easy to read. 
+        // map method allows to create a new array with added info
+        let top_OTU_id = top10_ids.map(id => "OTU " + id);
+        // console.log(top_OTU_id);
+
+        // create a trace for plot
+        // used reverse to display the graph from highest to lowest
+        let tracebar = {
+            x: top10_values.reverse(),
+            y: top_OTU_id.reverse(),
+            type: "bar",
+            orientation : 'h',
+            text : top10_labels.reverse()
+            };
+
+        let layout = {
+            title : "Top 10 OTU",
+            showlegend : false
+            };
+        // create the data into an array
+        let bardata = [tracebar];
+
+        // Use plotly to create a barh
+        Plotly.newPlot("bar", bardata, layout)
 
 
-// create a trace for plot
-// used reverse to display the graph from highest to lowest
-var tracebar = {
-    x: top10_values.reverse(),
-    y: top_OTU_id.reverse(),
-    type: "bar",
-    orientation : 'h',
-    text : top10_labels.reverse()
+        // Second TASK: Creating a bubble chart that display each samples
+        // x is otu_id and y is sample_values
+        // sample_id contains all the OTU in first sample
+
+        // create an array(list) of samples_value 
+        let Otu_values = data.samples[0].sample_values;
+        // console.log(Otu_values);
+
+        //  created a Trace for Bubble plot
+        let tracebubble = {
+            x: sample_ids,
+            y: Otu_values,
+            mode: "markers",
+            marker : {
+                size: Otu_values,
+                color: sample_ids
+            },
+            // didn't have variables saved but labels was retreieved
+            text : data.samples[0].otu_labels
+            };
+        // assign layout for clear context layout name was changed. 
+        let layout_2 = {
+            height: 500,
+            width : 1000,
+            xaxis : {title:"OTU ID"}
+            };
+
+        // creating an array for plot
+        let bubbledata = [tracebubble];
+        
+        // Plotting the bubble table
+        Plotly.newPlot("bubble", bubbledata, layout_2)
+
+    });
 };
-
-var layout = {
-    title : "Top 10 OTU",
-    showlegend : false
-};
-// create the data into an array
-var bardata = [tracebar];
-
-// Use plotly to create a barh
-Plotly.newPlot("bar", bardata, layout)
-
-
-// Second TASK: Creating a bubble chart that display each samples
-// x is otu_id and y is sample_values
-// sample_id contains all the OTU in first sample
-
-// create an array(list) of samples_value 
-var Otu_values = data.samples[0].sample_values;
-// console.log(Otu_values);
-
-
-
-//  created a Trace for Bubble plot
-var tracebubble = {
-    x: sample_ids,
-    y: Otu_values,
-    mode: "markers",
-    marker : {
-        size: Otu_values,
-        color: sample_ids
-    },
-    // didn't have variables saved but labels was retreieved
-    text : data.samples[0].otu_labels
-};
-// assign layout for clear context layout name was changed. 
-var layout_2 = {
-    height: 500,
-    width : 1000,
-    xaxis : {title:"OTU ID"}
-}
-
-// creating an array for plot
-var bubbledata = [tracebubble];
-
-Plotly.newPlot("bubble", bubbledata, layout_2)
-
-});
-
 
 // work on creating demographic data
 // call function to get data
 function getdeminfo(id){
     d3.json("samples.json").then((data)=> {
         // from the json call read only the metadata array
-        var meta_data = data.metadata;
+        let meta_data = data.metadata;
         console.log(meta_data);
 
         // use the id to filter the data
-        var result = meta_data.filter(item => item.id.toString() === id)[0];
+        let result = meta_data.filter(item => item.id.toString() === id)[0];
 
         // assign the html location on where the data should be displayed
-        var demoinfo = d3.select("#sample-metadata");
+        let demoinfo = d3.select("#sample-metadata");
 
         // to empty out the info to load next
         demoinfo.html("");
 
         // grab the data for the id and append the info
         Object.entries(result).ForEach((key) =>{
-            demoinfo.append("h5").text(key[0] + ":" + key[1]);
+            demoinfo.append("h5").text(key[0].toUpperCase() + ":" + key[1] + "\n");
         });
     });
  };
+// function for change event
+function optionChanged (id) {
+    getPlots(id);
+    getdemoinfo (id);
+}
+
+
 
  // need to add inital data for info to display
-// function dropdown_menu () {
+function init() {
     // select the drop down menu
-    var dropdown = d3.select("selDataset");
+    var dropdown = d3.select("#selDataset");
 
-    d3.json("samples.json").then((data) => {
-        // append the id data to dropdown menu
-        data.names.ForEach(function(name) {
+    // read the data 
+
+    d3.json("samples.json").then((data)=> {
+
+        console.log(data)
+
+ // get the id data to the dropdwown menu
+        data.names.forEach(function(name) {
+
             dropdown.append("option").text(name).property("value");
-        });
-    });
-// };
 
-// function for change event
-// function changeEvent (id) {
-//     getPlots(id);
-//     get demoinfo (id);
-// }
+        });
+
+    getPlots(data.names[0]);
+    getdeminfo(data.names[0]);
+    )}
+
+init()
+
 
 
 
