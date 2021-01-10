@@ -84,32 +84,33 @@ function getPlots (id){
 };
 
 // work on creating demographic data
-// call function to get data
+// call function to get data for id
 function getdeminfo(id){
-    d3.json("samples.json").then((data)=> {
-        // from the json call read only the metadata array
+
+    d3.json("samples.json").then ((data)=> {
+    // get only the metadata info
         let meta_data = data.metadata;
         console.log(meta_data);
-
-        // use the id to filter the data
+        
+        // filter meta_data for info by id
         let result = meta_data.filter(item => item.id.toString() === id)[0];
+        
+        // select demographic panel from the html
+        let demographInfo = d3.select("#sample-metadata");
 
-        // assign the html location on where the data should be displayed
-        let demoinfo = d3.select("#sample-metadata");
+        // empty the panel to refresh after each search 
+        demographInfo.html("");
 
-        // to empty out the info to load next
-        demoinfo.html("");
-
-        // grab the data for the id and append the info
-        Object.entries(result).ForEach((key) =>{
-            demoinfo.append("h5").text(key[0].toUpperCase() + ":" + key[1] + "\n");
-        });
+        // extract the necessary demogrphic data based on id and append info to the panel
+        Object.entries(result).forEach((key)=> {
+            demographInfo.append("h5").text(key[0] + ": " + key[1] + "\n");
+        }); 
     });
  };
 // function for change event
 function optionChanged (id) {
     getPlots(id);
-    getdemoinfo (id);
+    getdeminfo (id);
 }
 
 
@@ -117,7 +118,7 @@ function optionChanged (id) {
  // need to add inital data for info to display
 function init() {
     // select the drop down menu
-    var dropdown = d3.select("#selDataset");
+    let dropdown = d3.select("#selDataset");
 
     // read the data 
 
@@ -134,13 +135,7 @@ function init() {
 
     getPlots(data.names[0]);
     getdeminfo(data.names[0]);
-    )}
+    });
+};
 
-init()
-
-
-
-
-
-// thought process: similar to creating table for previous homework
-// dropdown button needed and connect the json to display id info
+init();
