@@ -111,8 +111,8 @@ function getdeminfo(id){
 function optionChanged (id) {
     getPlots(id);
     getdeminfo (id);
+    gauge (id);
 }
-
 
 
  // need to add inital data for info to display
@@ -121,21 +121,21 @@ function init() {
     let dropdown = d3.select("#selDataset");
 
     // read the data 
-
     d3.json("samples.json").then((data)=> {
-
         console.log(data)
 
  // get the id data to the dropdwown menu
         data.names.forEach(function(name) {
-
             dropdown.append("option").text(name).property("value");
-
         });
 
+    // call the function to display the data
     getPlots(data.names[0]);
     getdeminfo(data.names[0]);
     });
 };
 
+// Bonus Challenge 
+
+// initate the call to pop the data
 init();
