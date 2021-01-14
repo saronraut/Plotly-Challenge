@@ -4,7 +4,7 @@
  * Deployed URL : 
  https://saronraut.github.io/StarterCode/index.html
  
- ---- Deployment failed with the Heroku, Enviroment: plotly-bellybutton-js Will not WORK from the page------
+ ---- Deployment failed with the Heroku, Enviroment: plotly-bellybutton-js Will NOT WORK from the page------
 
 
  In this Assingment, we were to build an interactive dashboard to explore the Belly Button Biodiversity dataset, which catalogs the microbes that colonize human navels.
