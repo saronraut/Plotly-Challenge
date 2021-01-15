@@ -127,6 +127,7 @@ function init() {
         });
 
     // call the function to display the data
+    // Displays the First ID data when opening the page
     getPlots(data.names[0]);
     getdeminfo(data.names[0]);
     });
