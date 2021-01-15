@@ -5,19 +5,19 @@ function getPlots (id){
     d3.json("samples.json").then((data) => {
         console.log(data);
         // trying to plot the otu from first sample
-        let sample_ids = data.samples[0].otu_ids;
+        let sample_ids = data.samples.filter(item => item.id.toString() === id)[0];
         // console.log(sample_ids);  
 
         // getting the list of the first 10
-        let top10_ids = sample_ids.slice(0,10);
+        let top10_ids = sample_ids.otu_ids.slice(0,10);
         // console.log(top10_ids);
 
         // create an array(list) of samples_value 
-        let top10_values = data.samples[0].sample_values.slice(0,10);
+        let top10_values = data.samples.filter(item => item.id.toString() === id)[0].sample_values.slice(0,10);
         // console.log(top10_values);
 
         // create an array of otu labels that correlate with info
-        let top10_labels = data.samples[0].otu_labels.slice(0,10);
+        let top10_labels = data.samples.filter(item => item.id.toString() === id)[0].otu_labels.slice(0,10);
         // console.log(top10_labels);
 
         // Since the Otu is displayed as int, need to add "OTU" infront
@@ -48,24 +48,22 @@ function getPlots (id){
 
 
         // Second TASK: Creating a bubble chart that display each samples
-        // x is otu_id and y is sample_values
-        // sample_id contains all the OTU in first sample
-
-        // create an array(list) of samples_value 
-        let Otu_values = data.samples[0].sample_values;
-        // console.log(Otu_values);
+        
+        // create an array(list) 
+        var otu_ids = data.samples.filter(item => item.id.toString() === id)[0].otu_ids;
+        var otu_labels = data.samples.filter(item => item.id.toString() === id)[0].otu_labels;
+        var sample_values = data.samples.filter(item => item.id.toString() === id)[0].sample_values;
 
         //  created a Trace for Bubble plot
         let tracebubble = {
-            x: sample_ids,
-            y: Otu_values,
+            x: otu_ids,
+            y: sample_values,
             mode: "markers",
             marker : {
-                size: Otu_values,
-                color: sample_ids
+                size: sample_values,
+                color: otu_ids
             },
-            // didn't have variables saved but labels was retreieved
-            text : data.samples[0].otu_labels
+            text : otu_labels
             };
         // assign layout for clear context layout name was changed. 
         let layout_2 = {
@@ -110,8 +108,7 @@ function getdeminfo(id){
 // function for change event
 function optionChanged (id) {
     getPlots(id);
-    getdeminfo (id);
-    gauge (id);
+    getdeminfo (id);   
 }
 
 
